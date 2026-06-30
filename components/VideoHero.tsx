@@ -1,15 +1,14 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { societyInfo } from '@/lib/constants'
+import Link from 'next/link'
+import { useApp } from '@/lib/context'
 
-interface VideoHeroProps {
-  className?: string
-}
-
-export default function VideoHero({ className = '' }: VideoHeroProps) {
+export default function VideoHero({ className = '' }: { className?: string }) {
+  const { t, theme } = useApp()
   const containerRef = useRef<HTMLDivElement>(null)
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start']
@@ -24,9 +23,8 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
       ref={containerRef}
       className={`relative min-h-screen flex items-center justify-center overflow-hidden ${className}`}
     >
-      {/* Video Background (using gradient + animation as fallback) */}
+      {/* Animated gradient background */}
       <div className="absolute inset-0">
-        {/* Animated gradient background as video substitute */}
         <motion.div 
           className="absolute inset-0"
           animate={{
@@ -44,14 +42,14 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
           }}
         />
         
-        {/* Animated grid lines */}
+        {/* Grid lines */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div 
             className="absolute inset-0"
             style={{
               backgroundImage: `
-                linear-gradient(rgba(192, 192, 192, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(192, 192, 192, 0.03) 1px, transparent 1px)
+                linear-gradient(${theme === 'light' ? 'rgba(0, 0, 0, 0.03)' : 'rgba(192, 192, 192, 0.03)'} 1px, transparent 1px),
+                linear-gradient(90deg, ${theme === 'light' ? 'rgba(0, 0, 0, 0.03)' : 'rgba(192, 192, 192, 0.03)'} 1px, transparent 1px)
               `,
               backgroundSize: '60px 60px',
             }}
@@ -66,15 +64,16 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
           />
         </div>
 
-        {/* Floating particles effect */}
+        {/* Particles */}
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 rounded-full bg-silver-bright/20"
+              className="absolute w-1 h-1 rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+                backgroundColor: theme === 'light' ? 'rgba(0,0,0,0.2)' : 'rgba(232,232,232,0.2)'
               }}
               animate={{
                 y: [0, -100, 0],
@@ -95,7 +94,7 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
       {/* Content */}
       <motion.div 
         style={{ opacity, scale, y }}
-        className="relative z-10 text-center px-6 max-w-4xl mx-auto"
+        className="relative z-10 text-center px-6 max-w-4xl mx-auto pt-20"
       >
         {/* Logo Animation */}
         <motion.div
@@ -110,9 +109,9 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
           >
             <defs>
               <linearGradient id="heroLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#E8E8E8" />
-                <stop offset="50%" stopColor="#C0C0C0" />
-                <stop offset="100%" stopColor="#8A8A8A" />
+                <stop offset="0%" stopColor={theme === 'light' ? '#1A1A1A' : '#E8E8E8'} />
+                <stop offset="50%" stopColor={theme === 'light' ? '#4A4A4A' : '#C0C0C0'} />
+                <stop offset="100%" stopColor={theme === 'light' ? '#6B6B80' : '#8A8A8A'} />
               </linearGradient>
               <filter id="glow">
                 <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -123,7 +122,6 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
               </filter>
             </defs>
             
-            {/* Outer ring */}
             <motion.circle
               cx="60"
               cy="60"
@@ -137,7 +135,6 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
               filter="url(#glow)"
             />
             
-            {/* Inner hexagon */}
             <motion.path
               d="M60 15 L95 35 L95 75 L60 95 L25 75 L25 35 Z"
               fill="none"
@@ -148,7 +145,6 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
               transition={{ duration: 1.5, delay: 0.5, ease: 'easeOut' }}
             />
             
-            {/* Center cross */}
             <motion.path
               d="M60 40 L60 80 M45 60 L75 60"
               stroke="url(#heroLogoGradient)"
@@ -158,7 +154,6 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
               transition={{ duration: 1, delay: 1, ease: 'easeOut' }}
             />
             
-            {/* Text */}
             <motion.text
               x="60"
               y="58"
@@ -197,7 +192,7 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
         >
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4">
             <span className="text-gradient-silver text-glow">
-              {societyInfo.name.en}
+              {t.hero.title}
             </span>
           </h1>
         </motion.div>
@@ -209,11 +204,11 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
           transition={{ duration: 0.8, delay: 1 }}
           className="mb-8"
         >
-          <p className="text-silver-muted text-lg md:text-xl font-body tracking-wide">
-            {societyInfo.name.zh}
+          <p className="text-lg md:text-xl font-body tracking-wide" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>
+            {t.hero.subtitle}
           </p>
-          <p className="text-silver-muted/60 text-sm font-mono mt-2">
-            {societyInfo.tagline}
+          <p className="text-sm font-mono mt-2" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A', opacity: 0.6 }}>
+            {t.hero.tagline}
           </p>
         </motion.div>
 
@@ -224,8 +219,8 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
           transition={{ duration: 0.5, delay: 1.2 }}
           className="inline-block mb-12"
         >
-          <span className="liquid-glass px-4 py-1.5 text-xs font-mono text-silver-muted rounded-full">
-            {societyInfo.name.short}
+          <span className="liquid-glass px-4 py-1.5 text-xs font-mono rounded-full" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>
+            HKUSTSFAIC
           </span>
         </motion.div>
 
@@ -235,27 +230,30 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.4 }}
         >
-          <motion.button
-            className="liquid-glass liquid-glass-pulse px-10 py-4 text-base font-display text-silver-bright group"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="relative z-10 flex items-center gap-3">
-              <span>Explore the Future</span>
-              <motion.svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </motion.svg>
-            </span>
-          </motion.button>
+          <Link href="/about">
+            <motion.button
+              className="liquid-glass liquid-glass-pulse px-10 py-4 text-base font-display group"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}
+            >
+              <span className="relative z-10 flex items-center gap-3">
+                <span>{t.hero.exploreBtn}</span>
+                <motion.svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </motion.svg>
+              </span>
+            </motion.button>
+          </Link>
         </motion.div>
       </motion.div>
 
@@ -271,16 +269,16 @@ export default function VideoHero({ className = '' }: VideoHeroProps) {
           transition={{ duration: 2, repeat: Infinity }}
           className="flex flex-col items-center gap-2"
         >
-          <span className="text-xs text-silver-muted/50 font-mono tracking-widest">SCROLL</span>
+          <span className="text-xs font-mono tracking-widest" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A', opacity: 0.5 }}>{t.hero.scroll}</span>
           <div className="w-[1px] h-8 bg-gradient-to-b from-silver-muted/50 to-transparent" />
         </motion.div>
       </motion.div>
 
       {/* Corner decorations */}
-      <div className="absolute top-8 left-8 w-20 h-20 border-l border-t border-silver-muted/10" />
-      <div className="absolute top-8 right-8 w-20 h-20 border-r border-t border-silver-muted/10" />
-      <div className="absolute bottom-8 left-8 w-20 h-20 border-l border-b border-silver-muted/10" />
-      <div className="absolute bottom-8 right-8 w-20 h-20 border-r border-b border-silver-muted/10" />
+      <div className="absolute top-8 left-8 w-20 h-20 border-l border-t" style={{ borderColor: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(232,232,232,0.1)' }} />
+      <div className="absolute top-8 right-8 w-20 h-20 border-r border-t" style={{ borderColor: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(232,232,232,0.1)' }} />
+      <div className="absolute bottom-8 left-8 w-20 h-20 border-l border-b" style={{ borderColor: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(232,232,232,0.1)' }} />
+      <div className="absolute bottom-8 right-8 w-20 h-20 border-r border-b" style={{ borderColor: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(232,232,232,0.1)' }} />
     </section>
   )
 }

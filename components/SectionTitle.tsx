@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ReactNode } from 'react'
+import { useApp } from '@/lib/context'
 
 interface SectionTitleProps {
   children: ReactNode
@@ -18,6 +19,7 @@ export default function SectionTitle({
   className = '',
   as: Tag = 'h2'
 }: SectionTitleProps) {
+  const { theme } = useApp()
   const alignClasses = {
     left: 'text-left',
     center: 'text-center',
@@ -33,7 +35,7 @@ export default function SectionTitle({
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         {subtitle && (
-          <span className="inline-block text-xs font-mono text-silver-muted tracking-[0.3em] uppercase mb-4">
+          <span className="inline-block text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: theme === 'light' ? '#6B6B80' : '#6B6B80' }}>
             {subtitle}
           </span>
         )}
@@ -55,13 +57,17 @@ interface SectionDividerProps {
 }
 
 export function SectionDivider({ className = '' }: SectionDividerProps) {
+  const { theme } = useApp()
   return (
     <motion.div
       initial={{ scaleX: 0 }}
       whileInView={{ scaleX: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`w-full h-[1px] bg-gradient-to-r from-transparent via-silver-muted/20 to-transparent ${className}`}
+      className={`w-full h-[1px] ${className}`}
+      style={{ 
+        background: `linear-gradient(90deg, transparent 0%, ${theme === 'light' ? 'rgba(26,26,26,0.2)' : 'rgba(138,138,138,0.2)'} 50%, transparent 100%)`
+      }}
     />
   )
 }

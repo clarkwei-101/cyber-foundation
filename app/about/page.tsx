@@ -4,9 +4,12 @@ import { motion } from 'framer-motion'
 import SectionTitle, { SectionDivider } from '@/components/SectionTitle'
 import { MembersGrid } from '@/components/MemberCard'
 import LiquidGlassButton from '@/components/LiquidGlassButton'
-import { aiSection, sciFiSection, committeeMembers } from '@/lib/constants'
+import { committeeMembers } from '@/lib/constants'
+import { useApp } from '@/lib/context'
 
 export default function AboutPage() {
+  const { t, theme, isZh } = useApp()
+
   return (
     <>
       {/* Hero */}
@@ -17,14 +20,14 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="inline-block text-xs font-mono text-silver-muted tracking-[0.3em] uppercase mb-4">
-              Organization
+            <span className="inline-block text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: theme === 'light' ? '#6B6B80' : '#6B6B80' }}>
+              {t.about.subtitle}
             </span>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-gradient-silver mb-6">
-              社团架构
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-gradient-silver">
+              {t.about.title}
             </h1>
-            <p className="text-silver-muted/70 text-lg max-w-2xl mx-auto">
-              Cyber Foundation 采用独特的双轨架构，平等承载 AI 应用与科幻文学两大创作社群
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: theme === 'light' ? '#6B6B80' : '#6B6B80', opacity: 0.7 }}>
+              {t.about.description}
             </p>
           </motion.div>
         </div>
@@ -35,8 +38,8 @@ export default function AboutPage() {
       {/* Dual Track Architecture */}
       <section className="relative py-32 px-6">
         <div className="max-w-6xl mx-auto">
-          <SectionTitle subtitle="DUAL TRACK MODEL">
-            双轨架构
+          <SectionTitle subtitle={isZh ? '双轨模式' : 'DUAL TRACK MODEL'}>
+            {t.about.dualTrackTitle}
           </SectionTitle>
 
           <motion.div
@@ -46,86 +49,98 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
             className="mt-16"
           >
-            {/* Architecture Visual */}
-            <div className="relative max-w-3xl mx-auto">
-              {/* Center */}
+            {/* Architecture Visual - Triangle Layout */}
+            <div className="relative max-w-2xl mx-auto">
+              {/* Connecting Lines SVG */}
+              <svg className="absolute inset-0 w-full h-full -z-0 pointer-events-none" preserveAspectRatio="none">
+                {/* Line from AI to CF */}
+                <motion.path
+                  d="M 120 80 L 200 220"
+                  stroke={theme === 'light' ? 'rgba(26,26,26,0.4)' : 'rgba(192,192,192,0.4)'}
+                  strokeWidth="2"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                />
+                {/* Line from SF to CF */}
+                <motion.path
+                  d="M 480 80 L 400 220"
+                  stroke={theme === 'light' ? 'rgba(26,26,26,0.4)' : 'rgba(192,192,192,0.4)'}
+                  strokeWidth="2"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.6 }}
+                />
+                {/* Line between AI and SF */}
+                <motion.path
+                  d="M 120 80 L 480 80"
+                  stroke={theme === 'light' ? 'rgba(26,26,26,0.2)' : 'rgba(192,192,192,0.2)'}
+                  strokeWidth="1"
+                  strokeDasharray="4 4"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.4 }}
+                />
+              </svg>
+
+              {/* Top Row - AI and SF */}
+              <div className="grid grid-cols-2 gap-8 md:gap-16 mb-8">
+                {/* AI Co-Chair */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="glass-card p-6 text-center"
+                >
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center" style={{ backgroundColor: theme === 'light' ? 'rgba(26,26,26,0.1)' : 'rgba(192,192,192,0.1)' }}>
+                    <span className="font-display font-bold" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>AI</span>
+                  </div>
+                  <h4 className="font-display font-semibold text-sm mb-1" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>{t.about.aiChair}</h4>
+                  <p className="text-xs mb-2" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>{t.about.aiChairRole}</p>
+                  <p className="text-xs" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A', opacity: 0.7 }}>{t.about.aiChairDesc}</p>
+                </motion.div>
+
+                {/* Sci-Fi Co-Chair */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                  className="glass-card p-6 text-center"
+                >
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center" style={{ backgroundColor: theme === 'light' ? 'rgba(74,74,74,0.1)' : 'rgba(138,138,138,0.1)' }}>
+                    <span className="font-display font-semibold" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A' }}>SF</span>
+                  </div>
+                  <h4 className="font-display font-semibold text-sm mb-1" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A' }}>{t.about.sciFiChair}</h4>
+                  <p className="text-xs mb-2" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>{t.about.sciFiChairRole}</p>
+                  <p className="text-xs" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A', opacity: 0.7 }}>{t.about.sciFiChairDesc}</p>
+                </motion.div>
+              </div>
+
+              {/* Bottom Row - Cyber Foundation */}
               <motion.div
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className="relative z-10 glass-card p-8 text-center mx-auto max-w-md"
+                transition={{ delay: 0.5 }}
+                className="glass-card p-8 text-center max-w-xs mx-auto"
               >
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-silver-bright/20 to-silver-muted/10 flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 40 40" className="text-silver-bright">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ background: theme === 'light' ? 'linear-gradient(135deg, rgba(26,26,26,0.2), rgba(74,74,74,0.1))' : 'linear-gradient(135deg, rgba(192,192,192,0.2), rgba(138,138,138,0.1))' }}>
+                  <svg width="32" height="32" viewBox="0 0 40 40" className="text-silver-bright" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>
                     <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="1.5"/>
                     <path d="M20 8 L32 16 L32 28 L20 36 L8 28 L8 16 Z" fill="none" stroke="currentColor" strokeWidth="1.5"/>
                   </svg>
                 </div>
-                <h3 className="font-display text-xl font-bold text-silver-bright mb-2">Cyber Foundation</h3>
-                <p className="text-sm text-silver-muted">联席主席制</p>
+                <h3 className="font-display text-xl font-bold mb-2" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>Cyber Foundation</h3>
+                <p className="text-sm" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>{t.about.dualTrackTitle}</p>
               </motion.div>
-
-              {/* Left Track - AI */}
-              <motion.div
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="absolute top-1/2 left-0 -translate-y-1/2 glass-card p-6 w-64"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-silver-bright/10 flex items-center justify-center">
-                    <span className="font-display font-bold text-silver-bright">AI</span>
-                  </div>
-                  <div>
-                    <h4 className="font-display font-semibold text-silver-bright text-sm">AI Co-Chair</h4>
-                    <p className="text-xs text-silver-muted">AI事务联席主席</p>
-                  </div>
-                </div>
-                <p className="text-xs text-silver-muted/70">主导 AI 应用方向的战略规划与执行</p>
-              </motion.div>
-
-              {/* Right Track - Sci-Fi */}
-              <motion.div
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="absolute top-1/2 right-0 -translate-y-1/2 glass-card p-6 w-64"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-silver-muted/10 flex items-center justify-center">
-                    <span className="font-display font-semibold text-silver-muted">SF</span>
-                  </div>
-                  <div>
-                    <h4 className="font-display font-semibold text-silver-muted text-sm">Sci-Fi Co-Chair</h4>
-                    <p className="text-xs text-silver-muted/70">科幻事务联席主席</p>
-                  </div>
-                </div>
-                <p className="text-xs text-silver-muted/70">主导科幻分会的创作培育与活动组织</p>
-              </motion.div>
-
-              {/* Connecting Lines */}
-              <svg className="absolute inset-0 w-full h-full -z-10" preserveAspectRatio="none">
-                <motion.path
-                  d="M 128 128 L 64 128"
-                  stroke="rgba(192,192,192,0.3)"
-                  strokeWidth="1"
-                  strokeDasharray="4 4"
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  viewport={{ once: true }}
-                />
-                <motion.path
-                  d="M 192 128 L 256 128"
-                  stroke="rgba(192,192,192,0.3)"
-                  strokeWidth="1"
-                  strokeDasharray="4 4"
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  viewport={{ once: true }}
-                />
-              </svg>
             </div>
           </motion.div>
         </div>
@@ -134,14 +149,14 @@ export default function AboutPage() {
       <SectionDivider />
 
       {/* AI Section Details */}
-      <section className="relative py-32 px-6 bg-silver-bright/[0.02]">
+      <section className="relative py-32 px-6" style={{ backgroundColor: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(232,232,232,0.02)' }}>
         <div className="max-w-6xl mx-auto">
           <SectionTitle subtitle="AI APPLICATIONS" align="left">
-            {aiSection.name}
+            {t.aiSection.name}
           </SectionTitle>
 
           <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {aiSection.pillars.map((pillar, index) => (
+            {t.aiSection.pillars.map((pillar, index) => (
               <motion.div
                 key={pillar.title}
                 initial={{ opacity: 0, y: 30 }}
@@ -150,12 +165,12 @@ export default function AboutPage() {
                 transition={{ delay: index * 0.1 }}
                 className="glass-card p-6"
               >
-                <div className="w-12 h-12 rounded-xl bg-silver-bright/10 flex items-center justify-center mb-4">
-                  <span className="text-xl">0{index + 1}</span>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: theme === 'light' ? 'rgba(26,26,26,0.1)' : 'rgba(192,192,192,0.1)' }}>
+                  <span className="text-xl font-display font-bold" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>0{index + 1}</span>
                 </div>
-                <h3 className="font-display text-lg font-bold text-silver-bright mb-1">{pillar.title}</h3>
-                <p className="text-xs text-silver-muted mb-3">{pillar.titleZh}</p>
-                <p className="text-sm text-silver-muted/70">{pillar.description}</p>
+                <h3 className="font-display text-lg font-bold mb-1" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>{pillar.title}</h3>
+                <p className="text-xs mb-3" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>{pillar.titleZh}</p>
+                <p className="text-sm" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A', opacity: 0.7 }}>{pillar.description}</p>
               </motion.div>
             ))}
           </div>
@@ -168,11 +183,11 @@ export default function AboutPage() {
       <section className="relative py-32 px-6">
         <div className="max-w-6xl mx-auto">
           <SectionTitle subtitle="SCIENCE FICTION" align="left">
-            {sciFiSection.name}
+            {t.sciFiSection.name}
           </SectionTitle>
 
           <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {sciFiSection.pillars.map((pillar, index) => (
+            {t.sciFiSection.pillars.map((pillar, index) => (
               <motion.div
                 key={pillar.title}
                 initial={{ opacity: 0, y: 30 }}
@@ -181,12 +196,12 @@ export default function AboutPage() {
                 transition={{ delay: index * 0.1 }}
                 className="glass-card p-6"
               >
-                <div className="w-12 h-12 rounded-xl bg-silver-muted/10 flex items-center justify-center mb-4">
-                  <span className="text-xl text-silver-muted">0{index + 1}</span>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: theme === 'light' ? 'rgba(74,74,74,0.1)' : 'rgba(138,138,138,0.1)' }}>
+                  <span className="text-xl font-display font-bold" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A' }}>0{index + 1}</span>
                 </div>
-                <h3 className="font-display text-lg font-bold text-silver-muted mb-1">{pillar.title}</h3>
-                <p className="text-xs text-silver-muted/60 mb-3">{pillar.titleZh}</p>
-                <p className="text-sm text-silver-muted/70">{pillar.description}</p>
+                <h3 className="font-display text-lg font-bold mb-1" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A' }}>{pillar.title}</h3>
+                <p className="text-xs mb-3" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>{pillar.titleZh}</p>
+                <p className="text-sm" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A', opacity: 0.7 }}>{pillar.description}</p>
               </motion.div>
             ))}
           </div>
@@ -199,7 +214,7 @@ export default function AboutPage() {
       <section className="relative py-32 px-6">
         <div className="max-w-6xl mx-auto">
           <SectionTitle subtitle="OUR TEAM">
-            执委会成员
+            {t.about.coreTeam}
           </SectionTitle>
 
           <div className="mt-16">
@@ -218,14 +233,14 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-display text-4xl font-bold text-gradient-silver mb-6">
-              成为我们的一员
+            <h2 className="font-display text-4xl font-bold mb-6 text-gradient-silver">
+              {t.nav.joinUs}
             </h2>
-            <p className="text-silver-muted/70 text-lg mb-8">
-              加入 Cyber Foundation，与我们一起创造未来
+            <p className="text-lg mb-8" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A', opacity: 0.7 }}>
+              {t.cta.description}
             </p>
             <LiquidGlassButton href="/join" pulse>
-              立即加入
+              {t.cta.joinBtn}
             </LiquidGlassButton>
           </motion.div>
         </div>

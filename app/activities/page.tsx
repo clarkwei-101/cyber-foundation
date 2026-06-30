@@ -5,8 +5,11 @@ import SectionTitle, { SectionDivider } from '@/components/SectionTitle'
 import ActivityCard, { TimelineActivity } from '@/components/ActivityCard'
 import LiquidGlassButton from '@/components/LiquidGlassButton'
 import { activities } from '@/lib/constants'
+import { useApp } from '@/lib/context'
 
 export default function ActivitiesPage() {
+  const { t, theme, isZh } = useApp()
+
   return (
     <>
       {/* Hero */}
@@ -17,14 +20,14 @@ export default function ActivitiesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="inline-block text-xs font-mono text-silver-muted tracking-[0.3em] uppercase mb-4">
-              Events & Activities
+            <span className="inline-block text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: theme === 'light' ? '#6B6B80' : '#6B6B80' }}>
+              {t.activities.subtitle}
             </span>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-gradient-silver mb-6">
-              活动中心
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-gradient-silver">
+              {t.activities.title}
             </h1>
-            <p className="text-silver-muted/70 text-lg max-w-2xl mx-auto">
-              从 Vibe Coding 工作坊到科幻读书会，探索 AI 与科幻的无限可能
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: theme === 'light' ? '#6B6B80' : '#6B6B80', opacity: 0.7 }}>
+              {t.activities.description}
             </p>
           </motion.div>
         </div>
@@ -35,8 +38,8 @@ export default function ActivitiesPage() {
       {/* Upcoming Events */}
       <section className="relative py-32 px-6">
         <div className="max-w-6xl mx-auto">
-          <SectionTitle subtitle="COMING SOON">
-            即将举办
+          <SectionTitle subtitle={t.activities.upcoming}>
+            {t.activities.upcomingTitle}
           </SectionTitle>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -58,10 +61,10 @@ export default function ActivitiesPage() {
       <SectionDivider />
 
       {/* Past Events */}
-      <section className="relative py-32 px-6 bg-silver-bright/[0.02]">
+      <section className="relative py-32 px-6" style={{ backgroundColor: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(232,232,232,0.02)' }}>
         <div className="max-w-6xl mx-auto">
-          <SectionTitle subtitle="MEMORIES">
-            往期活动
+          <SectionTitle subtitle={t.activities.past}>
+            {t.activities.pastTitle}
           </SectionTitle>
 
           <div className="mt-16 space-y-8">
@@ -77,8 +80,8 @@ export default function ActivitiesPage() {
       {/* Activity Categories */}
       <section className="relative py-32 px-6">
         <div className="max-w-6xl mx-auto">
-          <SectionTitle subtitle="CATEGORIES">
-            活动类型
+          <SectionTitle subtitle={t.activities.subtitle === '活动中心' ? '活动分类' : 'CATEGORIES'}>
+            {t.activities.activityTypes}
           </SectionTitle>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -90,27 +93,25 @@ export default function ActivitiesPage() {
               className="glass-card p-8"
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-silver-bright/10 flex items-center justify-center">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-silver-bright">
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: theme === 'light' ? 'rgba(26,26,26,0.1)' : 'rgba(192,192,192,0.1)' }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-display text-xl font-bold text-silver-bright">AI 活动</h3>
-                  <p className="text-sm text-silver-muted">人工智能应用</p>
+                  <h3 className="font-display text-xl font-bold" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>
+                    {t.activities.aiActivities}
+                  </h3>
+                  <p className="text-sm" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>
+                    {t.activities.aiActivitiesDesc}
+                  </p>
                 </div>
               </div>
 
               <ul className="space-y-3">
-                {[
-                  'Vibe Coding 工作坊',
-                  'AIGC 内容创作培训',
-                  'AI Demo Day 成果展示',
-                  '行业嘉宾分享会',
-                  'AI Hackathon 黑客松',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-silver-muted/80">
-                    <span className="w-1.5 h-1.5 rounded-full bg-silver-bright/50" />
+                {t.activities.activityList.ai.map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-sm" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A', opacity: 0.8 }}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme === 'light' ? '#1A1A1A' : '#E8E8E8', opacity: 0.5 }} />
                     {item}
                   </li>
                 ))}
@@ -125,28 +126,26 @@ export default function ActivitiesPage() {
               className="glass-card p-8"
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-silver-muted/10 flex items-center justify-center">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-silver-muted">
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: theme === 'light' ? 'rgba(74,74,74,0.1)' : 'rgba(138,138,138,0.1)' }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A' }}>
                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-display text-xl font-bold text-silver-muted">Sci-Fi 活动</h3>
-                  <p className="text-sm text-silver-muted/70">科幻文学创作</p>
+                  <h3 className="font-display text-xl font-bold" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A' }}>
+                    {t.activities.scifiActivities}
+                  </h3>
+                  <p className="text-sm" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A', opacity: 0.7 }}>
+                    {t.activities.scifiActivitiesDesc}
+                  </p>
                 </div>
               </div>
 
               <ul className="space-y-3">
-                {[
-                  '科幻写作工作坊',
-                  '科幻读书会',
-                  '知名作家讲座',
-                  '科幻 AIGC 电影节',
-                  '全港科幻征文比赛',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-silver-muted/80">
-                    <span className="w-1.5 h-1.5 rounded-full bg-silver-muted/50" />
+                {t.activities.activityList.scifi.map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-sm" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A', opacity: 0.8 }}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme === 'light' ? '#4A4A4A' : '#8A8A8A', opacity: 0.5 }} />
                     {item}
                   </li>
                 ))}
@@ -166,18 +165,18 @@ export default function ActivitiesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-display text-4xl font-bold text-gradient-silver mb-6">
-              参与我们的活动
+            <h2 className="font-display text-4xl font-bold mb-6 text-gradient-silver">
+              {t.activities.joinTitle}
             </h2>
-            <p className="text-silver-muted/70 text-lg mb-8">
-              关注我们的社交媒体，获取最新活动通知
+            <p className="text-lg mb-8" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A', opacity: 0.7 }}>
+              {t.activities.joinDesc}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <LiquidGlassButton href="/join" pulse>
-                报名参与
+                {t.cta.joinBtn}
               </LiquidGlassButton>
               <LiquidGlassButton href="/social">
-                关注我们
+                {t.nav.social}
               </LiquidGlassButton>
             </div>
           </motion.div>

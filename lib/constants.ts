@@ -1,4 +1,4 @@
-// Society Information
+// Society Information (Configuration Only - Translations in i18n.ts)
 export const societyInfo: {
   name: { en: string; zh: string; short: string }
   tagline: string
@@ -75,96 +75,62 @@ export const socialLinks: Array<{
   },
 ]
 
-// AI Applications Information
-export const aiSection = {
-  name: 'AI Applications',
-  nameZh: 'AI应用',
-  description: 'Vibe Coding · 开源商业化 · AI内容创作',
-  pillars: [
-    {
-      title: 'Vibe Coding',
-      titleZh: 'AI辅助开发',
-      description: '使用Cursor, Copilot, Claude等工具快速构建产品'
-    },
-    {
-      title: 'Open Source',
-      titleZh: '开源商业化',
-      description: '发掘优质开源项目，转化为可变现产品'
-    },
-    {
-      title: 'Content Creation',
-      titleZh: 'AI内容创作',
-      description: '每周AI教程、AIGC短剧、产品Vlog'
-    }
-  ]
-}
-
-// Science Fiction Information
-export const sciFiSection = {
-  name: 'Science Fiction',
-  nameZh: '科幻创作',
-  description: '创意写作 · 科幻出版 · 文化培育',
-  pillars: [
-    {
-      title: 'Writing Workshop',
-      titleZh: '写作工作坊',
-      description: '每月内部写作坊，培育原创科幻作品'
-    },
-    {
-      title: 'Sci-Fi Journal',
-      titleZh: '在线科幻期刊',
-      description: '每月更新，发表优质科幻短篇小说'
-    },
-    {
-      title: 'Writing Competition',
-      titleZh: '全港科幻征文',
-      description: '香港首个全港高校科幻征文比赛'
-    }
-  ]
-}
-
-// Committee Members (Sample Data)
+// Committee Members (Sample Data - Translations in i18n.ts)
 export const committeeMembers: Array<{
   name: string
   role: string
+  roleZh: string
   category: 'tech' | 'creative' | 'both'
   bio: string
+  bioZh: string
 }> = [
   {
     name: 'AI Co-Chair',
-    role: 'AI事务联席主席',
+    role: 'AI Affairs Co-Chair',
+    roleZh: 'AI事务联席主席',
     category: 'tech',
-    bio: '负责AI应用方向的战略规划与执行'
+    bio: 'Responsible for strategic planning and execution of AI application direction',
+    bioZh: '负责AI应用方向的战略规划与执行'
   },
   {
     name: 'Sci-Fi Co-Chair',
-    role: '科幻事务联席主席',
+    role: 'Sci-Fi Affairs Co-Chair',
+    roleZh: '科幻事务联席主席',
     category: 'creative',
-    bio: '负责科幻分会的创作培育与活动组织'
+    bio: 'Responsible for creative cultivation and event organization of the sci-fi division',
+    bioZh: '负责科幻分会的创作培育与活动组织'
   },
   {
     name: 'Secretary',
-    role: '秘书',
+    role: 'Secretary',
+    roleZh: '秘书',
     category: 'both',
-    bio: '协调社团运作，处理日常事务'
+    bio: 'Coordinate society operations and handle daily affairs',
+    bioZh: '协调社团运作，处理日常事务'
   },
   {
     name: 'Treasurer',
-    role: '财务',
+    role: 'Treasurer',
+    roleZh: '财务',
     category: 'both',
-    bio: '管理社团预算与资金运作'
+    bio: 'Manage society budget and financial operations',
+    bioZh: '管理社团预算与资金运作'
   },
   {
     name: 'Tech Lead',
-    role: '技术负责人',
+    role: 'Technology Lead',
+    roleZh: '技术负责人',
     category: 'tech',
-    bio: '主导技术项目开发与代码审查'
+    bio: 'Lead technical project development and code review',
+    bioZh: '主导技术项目开发与代码审查'
   },
   {
     name: 'Creative Lead',
-    role: '创意负责人',
+    role: 'Creative Lead',
+    roleZh: '创意负责人',
     category: 'creative',
-    bio: '策划科幻创作与出版工作'
+    bio: 'Plan sci-fi creation and publishing work',
+    bioZh: '策划科幻创作与出版工作'
   },
 ]
 

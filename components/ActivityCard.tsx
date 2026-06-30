@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useApp } from '@/lib/context'
 
 interface ActivityCardProps {
   title: string
@@ -23,7 +24,8 @@ export default function ActivityCard({
   imageUrl,
   href = '#'
 }: ActivityCardProps) {
-  const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  const { t, theme, isZh } = useApp()
+  const formattedDate = new Date(date).toLocaleDateString(isZh ? 'zh-CN' : 'en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
@@ -42,12 +44,15 @@ export default function ActivityCard({
           {imageUrl ? (
             <Image
               src={imageUrl}
-              alt={title}
+              alt={isZh ? titleZh : title}
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-silver-bright/10 to-silver-muted/5 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-silver-bright/10 to-silver-muted/5 flex items-center justify-center" style={{ 
+              '--tw-gradient-from': theme === 'light' ? 'rgba(26,26,26,0.1)' : 'rgba(232,232,232,0.1)',
+              '--tw-gradient-to': theme === 'light' ? 'rgba(74,74,74,0.05)' : 'rgba(138,138,138,0.05)'
+            } as React.CSSProperties }>
               <div className={`w-16 h-16 rounded-xl border border-dashed ${
                 category === 'tech' ? 'border-silver-bright/30' : 'border-silver-muted/30'
               } flex items-center justify-center`}>
@@ -69,7 +74,7 @@ export default function ActivityCard({
               ? 'bg-silver-bright/20 text-silver-bright border border-silver-bright/30'
               : 'bg-silver-muted/20 text-silver-muted border border-silver-muted/30'
           }`}>
-            {category === 'tech' ? 'AI' : 'Sci-Fi'}
+            {category === 'tech' ? t.common.tech : t.creative.scifi}
           </div>
           
           {/* Date */}
@@ -82,17 +87,17 @@ export default function ActivityCard({
 
         {/* Content */}
         <div className="p-6">
-          <h3 className="font-display text-xl font-semibold text-silver-bright mb-1 group-hover:text-white transition-colors">
-            {title}
+          <h3 className="font-display text-xl font-semibold mb-1 group-hover:opacity-100 transition-colors" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>
+            {isZh ? titleZh : title}
           </h3>
-          <p className="text-sm text-silver-muted mb-3">{titleZh}</p>
-          <p className="text-sm text-silver-muted/70 leading-relaxed">
+          <p className="text-sm mb-3" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>{isZh ? title : titleZh}</p>
+          <p className="text-sm leading-relaxed" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A', opacity: 0.7 }}>
             {description}
           </p>
           
           {/* Arrow indicator */}
-          <div className="mt-4 flex items-center gap-2 text-silver-muted/50 group-hover:text-silver-bright transition-colors">
-            <span className="text-xs font-mono">Read More</span>
+          <div className="mt-4 flex items-center gap-2" style={{ color: theme === 'light' ? '#6B6B80' : '#6B6B80', opacity: 0.5 }}>
+            <span className="text-xs font-mono">{t.common.readMore}</span>
             <motion.svg
               width="16"
               height="16"
@@ -117,6 +122,8 @@ interface TimelineActivityProps extends ActivityCardProps {
 }
 
 export function TimelineActivity({ isPast = false, ...props }: TimelineActivityProps) {
+  const { theme } = useApp()
+  
   return (
     <div className="relative pl-8 md:pl-12">
       {/* Timeline line */}
@@ -132,6 +139,11 @@ export function TimelineActivity({ isPast = false, ...props }: TimelineActivityP
             ? 'bg-silver-muted/40' 
             : 'bg-silver-bright animate-pulse'
         }`}
+        style={{ 
+          backgroundColor: isPast 
+            ? (theme === 'light' ? 'rgba(74,74,74,0.4)' : 'rgba(138,138,138,0.4)')
+            : (theme === 'light' ? '#1A1A1A' : '#E8E8E8')
+        }}
       />
       
       {/* Card */}

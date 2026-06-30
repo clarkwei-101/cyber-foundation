@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { socialLinks } from '@/lib/constants'
+import { useApp } from '@/lib/context'
 
 const iconMap: Record<string, JSX.Element> = {
   bilibili: (
@@ -42,6 +43,16 @@ const iconMap: Record<string, JSX.Element> = {
   ),
 }
 
+const platformNames: Record<string, { en: string; zh: string }> = {
+  Bilibili: { en: 'Bilibili', zh: '哔哩哔哩' },
+  Instagram: { en: 'Instagram', zh: 'Instagram' },
+  小红书: { en: 'Xiaohongshu', zh: '小红书' },
+  抖音: { en: 'Douyin', zh: '抖音' },
+  YouTube: { en: 'YouTube', zh: 'YouTube' },
+  GitHub: { en: 'GitHub', zh: 'GitHub' },
+  LinkedIn: { en: 'LinkedIn', zh: '领英' },
+}
+
 interface SocialLinkProps {
   platform: string
   icon: string
@@ -50,6 +61,10 @@ interface SocialLinkProps {
 }
 
 export default function SocialLink({ platform, icon, url, color }: SocialLinkProps) {
+  const { t, theme } = useApp()
+  const isZh = t.nav.about === '社团架构'
+  const platformName = platformNames[platform] || { en: platform, zh: platform }
+
   return (
     <motion.a
       href={url}
@@ -59,11 +74,10 @@ export default function SocialLink({ platform, icon, url, color }: SocialLinkPro
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-      className="glass-card p-6 flex flex-col items-center gap-4 group cursor-pointer"
-      style={{ '--hover-color': color } as React.CSSProperties}
+      className="glass-card p-6 flex flex-col items-center gap-4 group cursor-pointer relative"
     >
       <div 
-        className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:shadow-lg"
+        className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300"
         style={{ 
           backgroundColor: `${color}15`,
           color: color,
@@ -71,8 +85,8 @@ export default function SocialLink({ platform, icon, url, color }: SocialLinkPro
       >
         {iconMap[icon]}
       </div>
-      <span className="text-sm font-display text-silver-bright group-hover:text-white transition-colors">
-        {platform}
+      <span className="text-sm font-display group-hover:opacity-100 transition-colors" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>
+        {isZh ? platformName.zh : platformName.en}
       </span>
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{
         boxShadow: `0 0 30px ${color}30`

@@ -2,17 +2,27 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { useApp } from '@/lib/context'
 import { committeeMembers } from '@/lib/constants'
 
-interface MemberCardProps {
+interface Member {
   name: string
   role: string
-  category: 'tech' | 'creative' | 'both'
+  roleZh: string
   bio: string
+  bioZh: string
+  category: 'tech' | 'creative' | 'both'
   imageUrl?: string
 }
 
-export default function MemberCard({ name, role, category, bio, imageUrl }: MemberCardProps) {
+interface MemberCardProps {
+  member: Member
+}
+
+export default function MemberCard({ member }: MemberCardProps) {
+  const { t, theme } = useApp()
+  const isZh = t.nav.about === '社团架构'
+
   const categoryColor: Record<string, string> = {
     tech: 'from-silver-bright/20 to-transparent',
     creative: 'from-silver-muted/20 to-transparent',
@@ -29,60 +39,69 @@ export default function MemberCard({ name, role, category, bio, imageUrl }: Memb
     >
       {/* Avatar */}
       <div className="relative w-20 h-20 mx-auto mb-4">
-        <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${categoryColor[category] || categoryColor.both} blur-xl opacity-50 group-hover:opacity-80 transition-opacity`} />
-        {imageUrl ? (
+        <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${categoryColor[member.category] || categoryColor.both} blur-xl opacity-50 group-hover:opacity-80 transition-opacity`} />
+        {member.imageUrl ? (
           <Image
-            src={imageUrl}
-            alt={name}
+            src={member.imageUrl}
+            alt={member.name}
             fill
             className="rounded-full object-cover border border-white/10"
           />
         ) : (
-          <div className="w-full h-full rounded-full bg-gradient-to-br from-silver-bright/20 to-silver-muted/10 border border-white/10 flex items-center justify-center">
-            <span className="text-2xl font-display font-bold text-silver-bright/60">
-              {name.charAt(0)}
+          <div className="w-full h-full rounded-full bg-gradient-to-br from-silver-bright/20 to-silver-muted/10 border border-white/10 flex items-center justify-center" style={{ borderColor: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)' }}>
+            <span className="text-2xl font-display font-bold" style={{ color: theme === 'light' ? 'rgba(26,26,26,0.6)' : 'rgba(232,232,232,0.6)' }}>
+              {member.name.charAt(0)}
             </span>
           </div>
         )}
         
         {/* Category indicator */}
-        <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-mono font-bold border ${
-          category === 'tech' 
-            ? 'bg-silver-bright/20 border-silver-bright/40 text-silver-bright' 
-            : category === 'creative'
-            ? 'bg-silver-muted/20 border-silver-muted/40 text-silver-muted'
-            : 'bg-white/10 border-white/30 text-silver-bright'
-        }`}>
-          {category === 'both' ? '✦' : category === 'tech' ? 'AI' : 'SF'}
+        <div 
+          className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-mono font-bold border ${
+            member.category === 'tech' 
+              ? 'bg-silver-bright/20 border-silver-bright/40' 
+              : member.category === 'creative'
+              ? 'bg-silver-muted/20 border-silver-muted/40'
+              : 'bg-white/10 border-white/30'
+          }`}
+          style={{ 
+            color: member.category === 'tech' 
+              ? (theme === 'light' ? '#1A1A1A' : '#E8E8E8')
+              : member.category === 'creative'
+              ? (theme === 'light' ? '#4A4A4A' : '#8A8A8A')
+              : (theme === 'light' ? '#1A1A1A' : '#E8E8E8')
+          }}
+        >
+          {member.category === 'both' ? '✦' : member.category === 'tech' ? (isZh ? 'AI' : 'AI') : (isZh ? '创' : 'SF')}
         </div>
       </div>
 
       {/* Info */}
       <div className="text-center">
-        <h3 className="font-display text-lg font-semibold text-silver-bright mb-1">
-          {name}
+        <h3 className="font-display text-lg font-semibold mb-1" style={{ color: theme === 'light' ? '#1A1A1A' : '#E8E8E8' }}>
+          {member.name}
         </h3>
-        <p className="text-xs font-mono text-silver-muted mb-3">
-          {role}
+        <p className="text-xs font-mono mb-3" style={{ color: theme === 'light' ? '#6B6B80' : '#8A8A8A' }}>
+          {isZh ? member.roleZh : member.role}
         </p>
-        <p className="text-sm text-silver-muted/70 leading-relaxed">
-          {bio}
+        <p className="text-sm leading-relaxed" style={{ color: theme === 'light' ? '#4A4A4A' : '#8A8A8A', opacity: 0.7 }}>
+          {isZh ? member.bioZh : member.bio}
         </p>
       </div>
 
       {/* Hover glow effect */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-        <div className="absolute inset-0 rounded-2xl border border-silver-bright/20" />
+      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ borderColor: theme === 'light' ? 'rgba(26,26,26,0.2)' : 'rgba(232,232,232,0.2)' }}>
+        <div className="absolute inset-0 rounded-2xl border" style={{ borderColor: theme === 'light' ? 'rgba(26,26,26,0.2)' : 'rgba(232,232,232,0.2)' }} />
       </div>
     </motion.div>
   )
 }
 
 interface MembersGridProps {
-  members?: typeof committeeMembers
+  members?: Member[]
 }
 
-export function MembersGrid({ members = committeeMembers }: MembersGridProps) {
+export function MembersGrid({ members = committeeMembers as unknown as Member[] }: MembersGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {members.map((member, index) => (
@@ -93,7 +112,7 @@ export function MembersGrid({ members = committeeMembers }: MembersGridProps) {
           viewport={{ once: true }}
           transition={{ delay: index * 0.1 }}
         >
-          <MemberCard {...member} />
+          <MemberCard member={member} />
         </motion.div>
       ))}
     </div>

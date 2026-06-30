@@ -1,39 +1,12 @@
-import type { Metadata } from 'next'
-import { Space_Grotesk, IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google'
+'use client'
+
+import { motion } from 'framer-motion'
 import Navigation from '@/components/Navigation'
 import ParticleBackground from '@/components/ParticleBackground'
+import ScrollProgress from '@/components/ScrollProgress'
+import Footer from '@/components/Footer'
+import { AppProvider } from '@/lib/context'
 import './globals.css'
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-space-grotesk',
-  display: 'swap',
-})
-
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-ibm-plex-sans',
-  display: 'swap',
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
-  display: 'swap',
-})
-
-export const metadata: Metadata = {
-  title: 'Cyber Foundation | HKUSTSFAIC',
-  description: '香港科技大学AI×Sci-Fi社 - 连接前沿AI技术与想象力驱动的科幻创作',
-  keywords: ['AI', 'Science Fiction', 'HKUST', 'Cyber Foundation', 'HKUSTSFAIC', 'Vibe Coding'],
-  authors: [{ name: 'Cyber Foundation' }],
-  openGraph: {
-    title: 'Cyber Foundation | HKUSTSFAIC',
-    description: '香港科技大学AI×Sci-Fi社',
-    type: 'website',
-  },
-}
 
 export default function RootLayout({
   children,
@@ -41,71 +14,36 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${ibmPlexSans.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-body bg-black-deep text-silver-bright antialiased">
-        <ParticleBackground />
-        <Navigation />
-        <main>{children}</main>
+    <html lang="zh" suppressHydrationWarning>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#0F0F14" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <title>Cyber Foundation | AI × Science Fiction</title>
+        <meta name="description" content="Cyber Foundation - 连接前沿AI技术与想象力驱动的科幻创作。由学生主导的学会，以平等的双轨架构同时承载AI应用与科幻文学两大创作社群。" />
+        <meta name="keywords" content="AI, Science Fiction, Cyber Foundation, HKUST, 人工智能, 科幻, 香港科技大学" />
         
-        {/* Footer */}
-        <footer className="relative border-t border-white/5 bg-black-deep/50 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto px-6 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-              {/* Logo & Description */}
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <svg viewBox="0 0 40 40" className="w-10 h-10">
-                    <defs>
-                      <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#E8E8E8" />
-                        <stop offset="100%" stopColor="#8A8A8A" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="20" cy="20" r="18" fill="none" stroke="url(#footerLogoGradient)" strokeWidth="1.5"/>
-                    <path d="M20 8 L32 16 L32 28 L20 36 L8 28 L8 16 Z" fill="none" stroke="url(#footerLogoGradient)" strokeWidth="1.5"/>
-                    <text x="20" y="24" textAnchor="middle" fill="url(#footerLogoGradient)" fontSize="10" fontFamily="var(--font-space-grotesk)" fontWeight="bold">CF</text>
-                  </svg>
-                  <div>
-                    <div className="font-display font-bold text-lg text-silver-bright">Cyber Foundation</div>
-                    <div className="text-xs text-silver-muted">HKUSTSFAIC</div>
-                  </div>
-                </div>
-                <p className="text-sm text-silver-muted/70 leading-relaxed">
-                  连接前沿AI技术与想象力驱动的科幻创作
-                </p>
-              </div>
-
-              {/* Quick Links */}
-              <div>
-                <h4 className="font-display font-semibold text-silver-bright mb-4">Quick Links</h4>
-                <ul className="space-y-2 text-sm text-silver-muted/70">
-                  <li><a href="/about" className="hover:text-silver-bright transition-colors">社团架构</a></li>
-                  <li><a href="/activities" className="hover:text-silver-bright transition-colors">活动中心</a></li>
-                  <li><a href="/projects" className="hover:text-silver-bright transition-colors">项目展示</a></li>
-                  <li><a href="/join" className="hover:text-silver-bright transition-colors">加入我们</a></li>
-                </ul>
-              </div>
-
-              {/* Contact */}
-              <div>
-                <h4 className="font-display font-semibold text-silver-bright mb-4">Contact</h4>
-                <ul className="space-y-2 text-sm text-silver-muted/70">
-                  <li>Email: contact@hkustsfaic.org</li>
-                  <li>Discord: CyberFoundationHK</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-silver-muted/20 to-transparent mb-6" />
-
-            {/* Copyright */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-silver-muted/50">
-              <p>© 2026 Cyber Foundation. All rights reserved.</p>
-              <p className="font-mono">HKUSTSFAIC · 香港科技大学AI×Sci-Fi社</p>
-            </div>
-          </div>
-        </footer>
+        {/* Open Graph */}
+        <meta property="og:title" content="Cyber Foundation | AI × Science Fiction" />
+        <meta property="og:description" content="连接前沿AI技术与想象力驱动的科幻创作" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="zh_HK" />
+        <meta property="og:locale:alternate" content="en_US" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Cyber Foundation | AI × Science Fiction" />
+        <meta name="twitter:description" content="连接前沿AI技术与想象力驱动的科幻创作" />
+      </head>
+      <body className="font-body bg-black-deep text-silver-bright antialiased">
+        <AppProvider>
+          <ScrollProgress />
+          <ParticleBackground />
+          <Navigation />
+          <main>{children}</main>
+          <Footer />
+        </AppProvider>
       </body>
     </html>
   )

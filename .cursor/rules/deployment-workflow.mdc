@@ -1,0 +1,43 @@
+# Cyber Foundation Website Development Rules
+
+## Deployment Workflow
+
+### 强制流程
+1. **测试服优先** - 所有更改必须先在测试服预览验证
+2. **确认后发布** - 测试服OK后再用 `npx vercel --prod` 发布公网
+3. **记录变更** - 重要更新需同步更新知识库
+
+### URLs
+- **公网**: https://cyber-foundation-sigma.vercel.app
+- **测试服**: https://cyber-foundation-{hash}.vercel.app (push 自动生成)
+
+## Design System
+
+### Colors
+- 背景: `#000000` (black-deep), `#0A0A0A` (black-soft)
+- 文字: `#E8E8E8` (bright), `#C0C0C0` (metal), `#8A8A8A` (muted)
+
+### Components
+- `.glass-card` - 玻璃态卡片
+- `.liquid-glass` - 玻璃按钮
+- `.liquid-glass-pulse` - 脉冲动画按钮
+- `.text-gradient-silver` - 银色渐变文字
+- `.text-glow` - 发光文字
+
+### Animations
+- 使用 Framer Motion
+- 进场动画: `whileInView` + `viewport={{ once: true }}`
+- 悬停: `whileHover`, `whileTap`
+
+## File Structure
+```
+cyber-foundation/
+├── app/          # Next.js App Router pages
+├── components/   # React components
+├── lib/          # Constants, utils
+└── public/       # Static assets
+```
+
+## Data
+- 所有页面数据在 `lib/constants.ts`
+- 包含: societyInfo, navLinks, socialLinks, aiSection, sciFiSection, committeeMembers, activities, projects
